@@ -65,6 +65,7 @@ class Inference(object):
     def __init__(self, speaker_model):
         self.__model__  = speaker_model
         self.__model__.eval()
+        # self.device
         # self.gpu = 0
         # self.ngpu = 1
 
