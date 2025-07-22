@@ -3,7 +3,7 @@ import torch.nn as nn
 import torchaudio
 from torch import Tensor
 from typing import Tuple
-from utils import PreEmphasis
+from SASV.utils import PreEmphasis
 from .specaugment import SpecAugment
 from .wenet.transformer.encoder_cat import ConformerEncoder
 

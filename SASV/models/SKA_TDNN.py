@@ -7,7 +7,7 @@ import torch.nn.functional as F
 import torchaudio
 import pdb
 from collections import OrderedDict
-from utils import PreEmphasis
+from SASV.utils import PreEmphasis
 from .specaugment import SpecAugment
 #from positional_encodings import PositionalEncoding2D
 

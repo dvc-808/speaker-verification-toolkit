@@ -28,7 +28,8 @@ class WrappedModel(nn.Module):
 class SASVNet(nn.Module):
     def __init__(self, model, **kwargs):
         super(SASVNet, self).__init__()
-        SASVNetModel = importlib.import_module('models.'+model).__getattribute__('MainModel')
+        # sys.path.append(os.path.join(os.path.dirname(__file__), 'SASV'))
+        SASVNetModel = importlib.import_module('SASV.models.'+model).__getattribute__('MainModel')
         self.__S__ = SASVNetModel(**kwargs)
 
     def forward(self, data):

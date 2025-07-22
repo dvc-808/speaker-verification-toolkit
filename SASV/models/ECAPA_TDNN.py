@@ -9,7 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchaudio
 import pdb
-from utils import PreEmphasis
+from SASV.utils import PreEmphasis
 
 class SEModule(nn.Module):
     def __init__(self, channels, bottleneck=128):

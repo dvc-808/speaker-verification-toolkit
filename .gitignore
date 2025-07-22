@@ -2,4 +2,6 @@ apivenv/
 __pycache__/
 test.py
 audio_enroll/
-trainSASVNet.py
+SASV/trainSASVNet.py
+.env
+SASV/__pycache__/

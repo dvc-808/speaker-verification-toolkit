@@ -2,6 +2,8 @@ from fastapi.responses import JSONResponse
 import soundfile
 import os
 
+from Database import Speaker
+
 def preprocess_audio(file):
     return file
 
@@ -13,6 +15,8 @@ def check_file_format(files):
         
 
 def enroll_controller(model, files):
+    #check SSID duplication
+
     #take request
     
     #parse request and locate audio file
