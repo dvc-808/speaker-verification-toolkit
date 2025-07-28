@@ -1,13 +1,13 @@
-import pydantic
+from pydantic import Field
 from beanie import Document
 from typing import List
 
 class Speaker(Document):
     fullname: str
-    ssid: str
+    ssid: str = Field(..., unique=True)
+    audio_path: str
     embeddings: List[float]
-    
-    #Pydantic convention, just a helper, nice to have when working in a team project
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -17,21 +17,15 @@ class Speaker(Document):
             }
         }
 
-    #Beanie convention, tell the ODM which document in the database to map
     class Settings:
         name = "speaker"
-        indexes = [
-            {"key": "ssid", "unique": True}
-        ]
+
 
 class Admin(Document):
-    username: str
-    password:str
+    username: str = Field(..., unique=True)
+    password: str
 
     class Settings:
         name = "admin"
-        indexes = [
-            {"key": "username", "unique": True}
-        ]
 
-__all__ = [Admin, Speaker]
+__all__ = [Speaker, Admin]

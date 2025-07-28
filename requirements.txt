@@ -8,3 +8,4 @@ tqdm
 pyyaml
 soundfile
 typeguard==2.13.3
+fastapi[standard]

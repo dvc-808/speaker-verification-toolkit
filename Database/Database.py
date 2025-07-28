@@ -21,7 +21,7 @@ async def database_connect():
         print(f"failed to connect to mongo \n {e}")
 
 
-class Speaker_crud:
+class Speaker_CRUD:
     async def new_speaker(_speaker:Speaker) -> Speaker:
         speaker = await _speaker.create()
         return speaker
@@ -31,6 +31,12 @@ class Speaker_crud:
         if speaker:
             await speaker.delete()
             return True
+        return False
+    
+    async def find_speaker_by_SSID(ssid: str) -> Union[bool, Speaker]:
+        speaker = await Speaker.find_one(Speaker.ssid == ssid)
+        if speaker:
+            return speaker
         return False
 
     async def update_speaker_by_SSID(ssid:str, ) -> Speaker:

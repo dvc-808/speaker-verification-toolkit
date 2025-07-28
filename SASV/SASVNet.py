@@ -82,7 +82,8 @@ class Inference(object):
             embeddings_list += [embed]
 
         mean_embeds = torch.mean(torch.stack(embeddings_list), dim=0)
-        return mean_embeds
+        print(f"Type of embeds {type(mean_embeds.squeeze().tolist())}")
+        return mean_embeds.squeeze().tolist()
 
     def infer(self, filename, max_frames):
         

@@ -5,3 +5,4 @@ audio_enroll/
 SASV/trainSASVNet.py
 .env
 SASV/__pycache__/
+media/
