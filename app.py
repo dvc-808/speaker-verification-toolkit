@@ -13,8 +13,8 @@ from Database.Database import database_connect
 #init NN model
 s = SASVNet(model="MFA_Conformer")
 s = WrappedModel(s)
-model = Inference(s)
-model.loadParameters("weights/MFA_11spk_VSASV_1.model")
+SASV_Model = Inference(s)
+SASV_Model.loadParameters("weights/MFA_11spk_VSASV_1.model")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -30,10 +30,10 @@ app = FastAPI(lifespan=lifespan)
 # app = FastAPI()
 
 
-@app.post("/enroll-user", response_model=ResponseModel)
-async def enroll(ssid: str ,fullname: str, files: List[UploadFile] = File(...) ):
-    return await enroll_controller(ssid ,fullname, model, files)
+@app.post("/enroll-speaker", response_model=ResponseModel)
+async def enroll(ssid: str ,fullname: str, files: List[UploadFile] = File(...)):
+    return await enroll_controller(ssid ,fullname, SASV_Model, files)
 
-@app.get("/verify")
-def verify():
-    return verify_controller()
+@app.post("/verify", response_model=ResponseModel)
+async def verify(ssid: str , file: UploadFile = File(...)):
+    return await verify_controller(ssid, file, SASV_Model)

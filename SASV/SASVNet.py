@@ -85,12 +85,12 @@ class Inference(object):
         print(f"Type of embeds {type(mean_embeds.squeeze().tolist())}")
         return mean_embeds.squeeze().tolist()
 
-    def infer(self, filename, max_frames):
-        
+    def verify(self, filename):
         self.__model__.eval()
-        inp1 = loadWAV(filename, max_frames)
+        inp1 = torch.FloatTensor(loadWAV(filename))
         with torch.no_grad():
             ref_embed = self.__model__(inp1).detach().cpu()
+        return ref_embed
 
 
     def loadParameters(self, path):

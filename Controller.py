@@ -1,6 +1,9 @@
 from fastapi.responses import JSONResponse
 import soundfile
 import os
+import time
+import torch.nn.functional as F
+from torch import FloatTensor
 
 from Database.Database import Speaker_CRUD
 from Database.db_models import Speaker
@@ -22,8 +25,8 @@ async def enroll_controller(ssid ,fullname, model, files):
     enroll_path = os.path.join("media/enroll", ssid)
     os.makedirs(enroll_path, exist_ok=True)
     # Save uploaded files to enroll_path
-    for file in files:
-        file_location = os.path.join(enroll_path, file.filename)
+    for i, file in enumerate(files):
+        file_location = os.path.join(enroll_path, f"{str(i)}.wav")
         with open(file_location, "wb") as f:
             f.write(await file.read())
 
@@ -56,8 +59,34 @@ async def enroll_controller(ssid ,fullname, model, files):
         "data": f"new speaker with {ssid} successfully created"
     }
 
-async def verify_controller():
-    return "dinhvietcuong"
+async def verify_controller(ssid, file, model):
+    speaker = await Speaker_CRUD.find_speaker_by_SSID(ssid)
+    if not speaker:
+        return {
+            "status_code": 404,
+            "response_type":"failed",
+            "data": f"No speaker with {ssid} in the database"
+        }
+    
+    verify_path = f"media/verify/{int(time.time())}.wav"
+    # Save uploaded files to enroll_path
+    with open(verify_path, "wb") as f:
+        f.write(await file.read())
+
+    test_embeddings = model.verify(verify_path)
+    target_embeddings=FloatTensor(speaker.embeddings).unsqueeze(0)
+
+    ts=F.normalize(test_embeddings, p=2, dim=1)
+    tar=F.normalize(target_embeddings, p=2, dim=1)
+    score = F.cosine_similarity(ts, tar)
+    os.remove(verify_path)
+    return {
+        "status_code": 200,
+        "response_type":"success",
+        "data": f"test with {score.item()}"
+    }
+
+
 
 
 
