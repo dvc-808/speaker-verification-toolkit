@@ -44,3 +44,7 @@ class Speaker_CRUD:
         if speaker:
             return True
         return False  
+    
+    async def get_all_speakers() -> List[Speaker]:
+        speakers = await Speaker.find_all().to_list()
+        return speakers

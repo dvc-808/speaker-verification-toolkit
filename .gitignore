@@ -6,3 +6,4 @@ SASV/trainSASVNet.py
 .env
 SASV/__pycache__/
 media/
+gcp.json

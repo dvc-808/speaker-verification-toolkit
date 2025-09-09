@@ -2,10 +2,12 @@
 torch
 torchaudio
 numpy
-scipy
-scikit-learn
 tqdm
 pyyaml
 soundfile
 typeguard==2.13.3
 fastapi[standard]
+google-cloud-speech
+pydub
+beanie
+motor

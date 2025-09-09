@@ -9,12 +9,26 @@ from Database.Database import database_connect
 from Database.db_models import Speaker
 from Schemas import ResponseModel
 from Database.Database import database_connect 
+from google.cloud import speech
+
 
 #init NN model
 s = SASVNet(model="MFA_Conformer")
 s = WrappedModel(s)
 SASV_Model = Inference(s)
 SASV_Model.loadParameters("weights/MFA_11spk_VSASV_1.model")
+
+#init stt client
+try:
+    stt_client = speech.SpeechClient.from_service_account_json("gcp.json")
+    stt_config = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz=16000,
+        language_code="vi-VN",
+    )
+    print ("gcp stt init successfully")
+except Exception as e:
+    print (f"failed to init gcp stt{e}")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -36,4 +50,8 @@ async def enroll(ssid: str ,fullname: str, files: List[UploadFile] = File(...)):
 
 @app.post("/verify", response_model=ResponseModel)
 async def verify(ssid: str , file: UploadFile = File(...)):
-    return await verify_controller(ssid, file, SASV_Model)
+    return await verify_controller(ssid, file, SASV_Model, stt_client, stt_config)
+
+@app.get("/speakers", response_model=ResponseModel)
+async def get_spk():
+    return await get_speakers()
