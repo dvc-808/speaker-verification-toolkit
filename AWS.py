@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 
-class SecreteManager():
+class AWS():
     def __init__(self):
         # Create a Secrets Manager client
         session = boto3.session.Session(profile_name="cuong26072003")
@@ -21,3 +21,5 @@ class SecreteManager():
             raise e
         secret = get_secret_value_response['SecretString']
         return secret
+    # def put_s3_object():
+

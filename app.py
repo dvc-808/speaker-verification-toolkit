@@ -10,7 +10,7 @@ from Database.Database import database_connect
 from Database.db_models import Speaker
 from Schemas import ResponseModel
 from Database.Database import database_connect 
-from Secrete import SecreteManager
+from AWS import AWS
 from google.cloud import speech
 
 
@@ -20,13 +20,13 @@ s = WrappedModel(s)
 SASV_Model = Inference(s)
 SASV_Model.loadParameters("weights/MFA_11spk_VSASV_1.model")
 
-#AWS secman
-secman = SecreteManager()
+#AWS aws
+aws = AWS()
 
 
 #init stt client
 try:
-    gcp = json.loads(secman.get_secret(secname="doan/backend/gcp"))
+    gcp = json.loads(aws.get_secret(secname="doan/backend/gcp"))
     stt_client = speech.SpeechClient.from_service_account_info(gcp)
     stt_config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
@@ -39,7 +39,7 @@ except Exception as e:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await database_connect(secman)
+    await database_connect(aws)
     yield
 
 
