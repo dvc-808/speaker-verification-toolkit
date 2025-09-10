@@ -15,14 +15,14 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPO_URI:latest .
-      - docker tag $REPO_URI:lastest $REPO_URI:latest
+      - docker build -t $REPO_URI:IMAGE_TAG .
+      - docker tag $REPO_URI:IMAGE_TAG $REPO_URI:IMAGE_TAG
 
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing image to ECR...
-      - docker push $REPO_URI:lastest 
+      - docker push $REPO_URI:IMAGE_TAG 
       - echo Writing image definitions file...
       - printf '[{"name":"doan","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
 
