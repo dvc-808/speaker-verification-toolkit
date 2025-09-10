@@ -12,8 +12,8 @@ from Database.db_models import Speaker, Admin
 
 async def database_connect(secman):
     try: 
-        # load_dotenv()
-        # MONGO_URI = os.getenv('MONGO_URI')
+        ## load_dotenv()
+        ## MONGO_URI = os.getenv('MONGO_URI')
         MONGO_URI=secman.get_secret(secname="doan/backend/mongouri")
         client = AsyncIOMotorClient(MONGO_URI)
         await init_beanie(database=client.db_name, document_models=models.__all__)
