@@ -9,7 +9,7 @@ phases:
       - REGION=ap-southeast-1
       - REPO_NAME=doan/backend
       - IMAGE_TAG=latest
-      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
+      - aws ecr get-login --region $REGION --no-include-email
 
   build:
     commands:
