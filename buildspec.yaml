@@ -7,22 +7,23 @@ phases:
       - aws --version
       - ACCOUNT_ID=$(aws sts get-caller-identity --query account --output text)
       - REGION=ap-southeast-1
-      - REPO_URI=699754982358.dkr.ecr.ap-southeast-1.amazonaws.com/doan/backend
+      - REPO_NAME=doan/backend
+      - REPO_URI=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME
       - IMAGE_TAG=latest
-      - aws ecr get-login --region $REGION --no-include-email
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPO_URI
 
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPO_URI:IMAGE_TAG .
-      - docker tag $REPO_URI:IMAGE_TAG $REPO_URI:IMAGE_TAG
+      - docker build -t $REPO_URI:$IMAGE_TAG .
+      - docker tag $REPO_URI:$IMAGE_TAG $REPO_URI:$IMAGE_TAG
 
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing image to ECR...
-      - docker push $REPO_URI:IMAGE_TAG 
+      - docker push $REPO_URI:$IMAGE_TAG 
       - echo Writing image definitions file...
       - printf '[{"name":"doan","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
 
