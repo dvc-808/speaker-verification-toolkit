@@ -4,7 +4,7 @@ from botocore.exceptions import ClientError
 class AWS():
     def __init__(self):
         # Create a Secrets Manager client
-        session = boto3.session.Session(profile_name="cuong26072003")
+        session = boto3.session.Session()
         self.client = session.client(
             service_name='secretsmanager',
             region_name="ap-southeast-1"
