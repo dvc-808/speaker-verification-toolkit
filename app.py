@@ -48,6 +48,9 @@ app = FastAPI(lifespan=lifespan)
 
 # app = FastAPI()
 
+@app.get("/")
+def health_check():
+    return {"status": "ok"}
 
 @app.post("/enroll-speaker", response_model=ResponseModel)
 async def enroll(ssid: str ,fullname: str, files: List[UploadFile] = File(...)):
