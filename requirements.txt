@@ -11,3 +11,4 @@ google-cloud-speech
 pydub
 beanie
 motor
+boto3

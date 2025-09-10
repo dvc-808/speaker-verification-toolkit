@@ -2,6 +2,7 @@ from typing import Union, List
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, UploadFile, File, Body
 from contextlib import asynccontextmanager
+import json
 
 from Controller import *
 from SASV.SASVNet import *
@@ -9,6 +10,7 @@ from Database.Database import database_connect
 from Database.db_models import Speaker
 from Schemas import ResponseModel
 from Database.Database import database_connect 
+from Secrete import SecreteManager
 from google.cloud import speech
 
 
@@ -18,9 +20,14 @@ s = WrappedModel(s)
 SASV_Model = Inference(s)
 SASV_Model.loadParameters("weights/MFA_11spk_VSASV_1.model")
 
+#AWS secman
+secman = SecreteManager()
+
+
 #init stt client
 try:
-    stt_client = speech.SpeechClient.from_service_account_json("gcp.json")
+    gcp = json.loads(secman.get_secret(secname="doan/backend/gcp"))
+    stt_client = speech.SpeechClient.from_service_account_info(gcp)
     stt_config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=16000,
@@ -32,10 +39,8 @@ except Exception as e:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load the ML model
-    await database_connect()
+    await database_connect(secman)
     yield
-    # Clean up the ML models and release the resources
 
 
 app = FastAPI(lifespan=lifespan)
