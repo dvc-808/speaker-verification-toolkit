@@ -87,6 +87,8 @@ async def verify_controller(ssid, file, model, stt_client, stt_config):
             "data": f"No speaker with {ssid} in the database"
         }
     file_extension = os.path.splitext(file.filename)[-1]
+    
+    os.makedirs("media/verify", exist_ok=True)
     verify_path = f"media/verify/{int(time.time())}{file_extension}"
     # Save uploaded files to enroll_path
     with open(verify_path, "wb") as f:

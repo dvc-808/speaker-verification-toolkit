@@ -5,7 +5,6 @@ from typing import List
 class Speaker(Document):
     fullname: str
     ssid: str = Field(..., unique=True)
-    audio_path: str
     embeddings: List[float]
 
     class Config:
